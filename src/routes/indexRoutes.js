@@ -1,5 +1,4 @@
 import { Router } from "express"
-import Productos from '../models/Productos';
 import { createAsignaturas, deleteAsignaturas, renderAsignaturas, renderEditAsignaturas, statusAsignaturas, updateAsignaturas } from "../controllers/asignaturaController";
 import { createProfesores, deleteProfesores, renderEditProfesores, renderProfesores, statusProfesores, updateProfesores } from "../controllers/profesorController";
 import { createAlumnos, deleteAlumnos, renderAlumnos, renderEditAlumnos, statusAlumnos, updateAlumnos } from "../controllers/alumnoController";
@@ -7,46 +6,10 @@ import { createAlumnos, deleteAlumnos, renderAlumnos, renderEditAlumnos, statusA
 
 const router =Router();
 
-//PRODUCTOS
-router.get('/', async (req, res) => {
-    const productos = await Productos.find().lean();
-    res.render("index", {productos: productos});
+router.get('/', (req, res) =>{
+    res.render("index")
 });
 
-//Agregar productos
-router.post("/productos/agregar",  async (req, res) =>{
-   try {
-    const productos = Productos(req.body);
-    await productos.save();
-    res.redirect("/");
-   } catch (error) {
-    console.log(error);
-   }
-});
-
-//A buscar por id
-router.get("/update/:id", async (req, res) => {
-    try {
-        const productos = await Productos.findById(req.params.id).lean();
-        res.render("editar", {productos});
-    } catch (error) {
-        console.log(error.message);
-    }
-});
-//ACTUALIZA
-router.post("/update/:id", async (req, res) => {
-    const { id } = req.params;
-    await Productos.findByIdAndUpdate(id, req.body);
-
-    res.redirect("/");
-});
-//eliminar
-router.get("/delete/:id", async (req, res) => {
-    const { id } = req.params;
-    await Productos.findByIdAndDelete(id);
-
-    res.redirect("/");
-});
 
 //ALUMNOS
 router.get('/alumnos/agregar', renderAlumnos);
